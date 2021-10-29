@@ -50,3 +50,271 @@ Notes for project Euler problems
 - add up the line + carry
 - take the final digit and prepend it to the final answer
 - repeat until idx < max_digits * -1
+
+
+
+
+
+
++------------------------+
+|    p026 - 10/22/2021   |
++------------------------+
+
+dividing machine
+
+          0.1428571
+        -------
+      7 | 1           7 does not go into one
+        | 1.0         7 does go into 10, 1 time
+        -   7         subtract 1 * 7
+          ---
+            30        get 30
+        -   28        7 goes into 30 4 times, subtract
+           ---    
+             20       get 20
+             14       7 goes in 2 times
+             --
+              60      get 60
+              56      7 goes in 8 times
+              --
+               40
+               35     7 goes in 5 times
+               --
+                50
+                49    7 goes in 7 times
+                --
+                 10   7 goes in 1 time    --- we have repeated a dividend (10)
+
+         0.037037
+       -------
+    27 | 1
+         0                 27 goes in 0 times
+        -- 
+         1.0               subtract, add a zero, and increas idx of quotient (add dividend to list?)
+           0               27 goes in 0 times
+         ---               
+          100              
+           81              27 goes in 3 times
+          ---
+           190              
+           189             goes in 7 times
+           ---
+             10                                  --- we have a repeating dividend here
+              0            goes in 0 times
+              -  
+             100
+              81           goes in 3 times 
+             ---
+              190          
+              189          goes in 7 times 
+              ---
+                10                                --- repeating dividend again
+
+         0.5
+       -----
+     2 | 1                 0 times
+         0
+         -
+         10                5 times
+         10
+         -- 
+          0                --- we get zero, we stop
+
+
+
+
+          0.0010020040080160
+        ------
+    998 | 1                     goes in 0 times
+          0
+          -
+          1.0                   goes in 0 times
+            0
+          ---
+           100                  goes in 0 times
+             0
+           ---
+           1000                 goes in 1 time
+            998
+            ---
+              20                goes in 0 times
+               0
+              --
+              200               goes in 0 times
+                0
+              ---
+              2000              goes in 2 times
+              1996          
+              ----
+                 40             goes in 0 times
+                  0
+                 --         
+                 400            goes in 0 times
+                   0
+                 ---
+                 4000           goes in 4 times
+                 3992
+                 ----
+                    80          goes in 0 times
+                     0 
+                    --
+                    800         goes in 0 times
+                      0
+                    --- 
+                    8000             goes in 8 times
+                    7984
+                    ----
+                      160            goes in 0 times
+                        0
+                      ---
+                      1600           goes in 1 time
+                       998
+                       ---    
+                       6020          goes in 6 times
+                       5988
+                       ----
+                         320         goes in 0 times
+                           0
+                         ---
+                         3200        goes in 3 times
+                         2994
+                         ----
+                          2060       goes in 2 times
+                          1996
+                          ----
+                            640      goes in 0 times
+                              0
+                            ---
+                            6400        goes in 6 times
+                            5988
+                            ----
+                             4120       goes in 4 times
+                             3992 
+                             ----
+                              1280        goes in 1 time
+                               998
+                               ---
+                               2820         goes in 2 times
+                               1996    
+                               ----
+                                8240        goes in 8 times
+                                7984
+                                ----
+                                 2560       goes in 2 times
+                                 1996
+                                 ----
+                                  5640      goes in 5 times
+                                  4990
+                                  ----
+                                   6500     goes in 6 times
+                                   5988    
+                                   ----
+                                    5120    goes in 5 times
+                                    4990    
+                                    ----
+                                     1300       goes in 1 time
+                                      998
+                                     ----   
+                                      3020       3 times
+                                      2994
+                                      ----
+                                        260      0 times
+                                          0
+                                        ---
+                                        2600     2 times
+                                        1996
+                                        ----
+                                         6040      6 times
+                                         5988
+                                         ----
+                                           520      0 times
+                                             0
+                                           --- 
+                                           5200      5 times
+                                           4990
+                                           ----
+                                            2100      2 times
+                                            1996
+                                            ----
+                                             1040     1 time
+                                              998
+                                              ---
+                                               420    0
+                                                 0
+                                               ---
+                                               4200    4
+                                               3992
+                                               ----
+                                                2080   2
+                                                1996
+                                                ----
+                                                  840   0
+                                                    0
+                                                  ---
+                                                  8400    8
+                                                  7984
+                                                  ----
+                                                   4160    4
+                                                   3992
+                                                   ----
+                                                    1680
+
+
+          0.
+      -------
+  998 | 100
+
+
+
+
+divide and conquer notes:
+
+[−2, 1, −3, 4, −1, 2, 1, −5, 4]
+
+split it
+
+[-2, 1, -3, 4]
+
+split it 
+
+[-2, 1]
+
+[-3, 4]
+
+
+
+
+
+
+[-1, 2, 1, -5, 4]
+
+
+
+[-2, 1]
+[-3, 4]
+[-2, 1]
+[-3, 4]
+[-1, 2]
+[1, -5, 4]
+[-1, 2]
+[1]
+[-5, 4]
+[1]
+[-5, 4]
+
+
+
+
+
+Manachers notes:
+
+S' = '|a|b|a|b|a|'
+
+OldCenter = 3
+OldRadius = 3
+Center = 4
+Radius = 0
+
+while Center <= 6 (OldCenter + OldRadius) :
+  MirroredCenter = OldCenter - (Center - OldCenter)          3 - (4 - 3) = 2
+  MaxMirroredRadius = OldCenter + OldRadius - Center         3 + 3 - 4 = 2

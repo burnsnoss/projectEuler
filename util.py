@@ -2,28 +2,45 @@
 utility class for project euler problems
 ''' 
 
-def getFactors(n):
+def getFactors(n, perfect = False):
 	# returns a list of factors of n
 	# if it returns just [1, n], then it's prime
 	# should probably write another function that would take less time
 	#  to determine just if a number is prime, like isPrime()
+	# pass in perfect = True to return just perfect divisors of n
+	if n == 0:
+		return [0]
+
 	i = 2
-	fs = [1]  # factors list
+	fs = [1]           # factors lists
+	fs2 = [n]
 	target = n
-	while i < target:
+	sqrt = n ** 0.5    # makes it slightly faster if number is prime
+	while i < target and i <= sqrt:
 		if n % i == 0:
 			fs.append(i)
-			target = n / i
+			target = n // i
+			# if perfect factors, don't add square roots 
+			if target != i or not perfect:
+				fs2.insert(0, target)
+
 		i += 1
 
-	i = -1
-	len_factors = -1 * len(fs)
-	fs2 = []
-	while i >= len_factors:
-		fs2.append(n/fs[i])
-		i -= 1
+	# remove n if perfect factors only
+	if perfect:
+		fs2.pop(-1)
 
 	return fs + fs2
+
+
+def isPrime(n):
+	''' uses getFactors to determine if number is prime, 
+	      returns True if it is and False if not '''
+	if len(getFactors(n)) <= 2:
+		return True 
+	return False
+
+
 
 def getPrimes(x = 1, n = 10):
 	# returns a list of prime numbers beginning with the next prime after x
@@ -67,6 +84,7 @@ def eratosthenes(n):
 
 # adds up a list of numbers passed to it
 # numbers must be in string form, in a list
+# can handle big numbers 
 def sigma(terms = []):
 		if terms == []:
 			return 0
@@ -107,3 +125,116 @@ def sigma(terms = []):
 			final = str(carry) + final
 	
 		return final
+
+
+# factorial function, works on big numbers
+def factorial(n):
+	if int(n) <= 10:
+		return recursiveFactorial(n)
+
+	total = n
+	for i in range(n, 1, -1):
+		# generate a list of numbers to add using sigma
+		add_list = [str(total) for x in range(i-1)]
+		total = sigma(add_list)
+
+	return total
+
+
+# EZ clap factorial function for small numbers
+def recursiveFactorial(n):
+	if n == 1:
+		return n
+	else:
+		return n * recursiveFactorial(n-1)
+
+
+
+def fibonacci(n):
+	''' returns the nth fibonacci number; assuming f(1) = f(2) = 1 '''
+	if n < 3:
+		return 1
+
+	idx = 2
+	f1 = '1'
+	f2 = '1'
+
+	while True:
+		idx += 1
+		f3 = sigma([f1, f2])
+		if idx == n:
+			break
+		f1 = f2
+		f2 = f3
+
+	return f3
+
+
+
+def divider(d1, d2):
+	''' pass in two INTEGERS that you would like divided 
+	     it will divide until it resolves or repeats.
+	     it basically performs long division.
+	     d1 = dividend
+	     d2 = divisor
+	      returns:
+	        the quotient 
+	        the repeating portion of the decimal (will be 0 if resolved) '''
+
+	if int(d1) > int(d2):
+		return greaterThanOneDivide(d1, d2)
+	elif int(d1) == int(d2):
+		return '1', '0'
+
+	# the answer here will be less than one
+
+	# add the first dividend to the list here
+	dividends = [str(d1)]
+
+	# since d2 > d1, add a zero off the bat, add that number to the dividends list
+	d1 = str(d1) + '0'
+	dividends.append(d1)
+
+	# keep track of dividends index?
+	idx = 1
+
+	# answer is less than one, so start quotient this way
+	quotient = '0.'
+
+	resolved = False
+
+	while True:
+		 multiplier = int(d1) // int(d2)
+		 quotient += str(multiplier)
+		 remainder = int(d1) % int(d2)
+
+		 if remainder == 0:
+		 	# we've resolved
+		 	resolved = True
+		 	break
+
+		 # if there is a remainder, then add a zero to it
+		 #  set it equal to d1
+		 d1 = str(remainder) + '0'
+
+		 # check if d1 is in dividends, add if it is not
+		 # if it is, break, and return the repeating segment
+		 try:
+		 	idx = dividends.index(d1)
+		 	break
+		 except ValueError:
+		 	dividends.append(d1)
+		 	continue
+
+
+
+
+	if resolved:
+		return quotient, '0'
+	else:
+		return quotient, quotient[idx+1:]
+
+
+
+def greaterThanOneDivide(d1, d2):
+	pass
