@@ -36,6 +36,8 @@ def getFactors(n, perfect = False):
 def isPrime(n):
 	''' uses getFactors to determine if number is prime, 
 	      returns True if it is and False if not '''
+	if n < 0:
+		return False
 	if len(getFactors(n)) <= 2:
 		return True 
 	return False
